@@ -3,7 +3,7 @@
 from setuptools import setup, find_packages
 
 setup(name='Sim800l',
-      version='1.0.2',
+      version='1.0.3',
       description='SIM 800l',
       author='https://github.com/jakhax',
       author_email='jackogina60@gmail.com',
