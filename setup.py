@@ -3,7 +3,7 @@
 from distutils.core import setup
 
 setup(name='Sim800l',
-      version='1.0',
+      version='1.0.1',
       description='SIM 800l',
       author='https://github.com/jakhax',
       author_email='jackogina60@gmail.com',
