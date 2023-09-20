@@ -42,7 +42,7 @@ class SIM800L:
 
     def get_clip(self):
         return self._clip
-        
+
     def callback_msg(self,action):
         self.msg_action = action
 
@@ -98,7 +98,7 @@ class SIM800L:
     def delete_sms(self,id):
         self.command('AT+CMGD={}\n'.format(id),1)
 
-    def check_incoming(self): 
+    def check_incoming(self):
         if self.ser.in_waiting:
             buf=self.ser.readline()
             # print(buf)
