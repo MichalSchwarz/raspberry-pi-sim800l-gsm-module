@@ -4,6 +4,7 @@ setup.py
 Sim800l.egg-info/PKG-INFO
 Sim800l.egg-info/SOURCES.txt
 Sim800l.egg-info/dependency_links.txt
+Sim800l.egg-info/requires.txt
 Sim800l.egg-info/top_level.txt
 sim800l/__init__.py
 sim800l/main.py
