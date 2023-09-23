@@ -16,7 +16,7 @@ def convert_to_string(buf):
 class SIM800L:
     def __init__(self,ser):
         try:
-            self.ser=serial.Serial("/dev/serial0", baudrate=9600, timeout=1)
+            self.ser=serial.Serial("/dev/serial0", baudrate=115000, timeout=2)
         except Exception as e:
             sys.exit("Error: {}".format(e))
         self.incoming_action = None
@@ -58,7 +58,7 @@ class SIM800L:
         if waitfor>1000:
             time.sleep((waitfor-1000)/1000)
         buf=self.ser.readline() #discard linefeed etc
-        #print(buf)
+        print(buf)
         buf=self.ser.readline()
         if not buf:
             return None
@@ -101,7 +101,7 @@ class SIM800L:
     def check_incoming(self):
         if self.ser.in_waiting:
             buf=self.ser.readline()
-            # print(buf)
+            print(buf)
             buf = convert_to_string(buf)
             params=buf.split(',')
 
