@@ -16,7 +16,7 @@ def convert_to_string(buf):
 class SIM800L:
     def __init__(self,ser):
         try:
-            self.ser=serial.Serial("/dev/serial0", baudrate=115000, timeout=2)
+            self.ser=serial.Serial("/dev/serial0", baudrate=57600, timeout=2)
         except Exception as e:
             sys.exit("Error: {}".format(e))
         self.incoming_action = None
@@ -28,14 +28,23 @@ class SIM800L:
         self.savbuf = None
 
     def setup(self):
-        self.command('ATE0\n')         # command echo off
-        self.command('AT+CLIP=1\n')    # caller line identification
-        self.command('AT+CMGF=1\n')    # plain text SMS
-        self.command('AT+CLTS=1\n')    # enable get local timestamp mode
-        self.command('AT+CSCLK=0\n')   # disable automatic sleep
+        print('Setup2')
+        print('ATE0 ')
+        print(self.command('ATE0\n'))   # command echo off
+        print('AT+CLIP=1 ')
+        print(self.command('AT+CLIP=1\n'))   # caller line identification
+        print('AT+CMGF=1 ')
+        print(self.command('AT+CMGF=1\n'))   # plain text SMS
+        print('AT+CLTS=1 ')
+        print(self.command('AT+CLTS=1\n'))   # enable get local timestamp mode
+        print('AT+CSCLK=0 ')
+        print(self.command('AT+CSCLK=0\n'))   # disable automatic sleep
 
     def callback_incoming(self,action):
         self.incoming_action = action
+
+    def callback_clip(self,action):
+        self.clip_action = action
 
     def callback_no_carrier(self,action):
         self.no_carrier_action = action
@@ -58,7 +67,6 @@ class SIM800L:
         if waitfor>1000:
             time.sleep((waitfor-1000)/1000)
         buf=self.ser.readline() #discard linefeed etc
-        print(buf)
         buf=self.ser.readline()
         if not buf:
             return None
@@ -101,8 +109,8 @@ class SIM800L:
     def check_incoming(self):
         if self.ser.in_waiting:
             buf=self.ser.readline()
-            print(buf)
             buf = convert_to_string(buf)
+            print(buf)
             params=buf.split(',')
 
             if params[0][0:5] == "+CMTI":
@@ -111,11 +119,12 @@ class SIM800L:
                     self.msg_action()
 
             elif params[0] == "NO CARRIER":
+                if self.no_carrier_action:
                     self.no_carrier_action()
 
-            elif params[0] == "RING" or params[0][0:5] == "+CLIP":
-                #@todo handle
-                pass
+            elif params[0][0:5] == "+CLIP":
+                if self.clip_action:
+                    self.clip_action(params[0][8:-1])
 
     def read_and_delete_all(self):
         try:
