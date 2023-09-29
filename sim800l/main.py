@@ -100,7 +100,10 @@ class SIM800L:
                     number = params[1].replace('"',' ').strip()
                     date   = params[3].replace('"',' ').strip()
                     time   = params[4].replace('"',' ').strip()
-                    return  [number,date,time,self.savbuf]
+                    return  {'number': number,
+                             'date': date,
+                             'time': time,
+                             'message': self.savbuf}
         return None
 
     def delete_sms(self,id):
